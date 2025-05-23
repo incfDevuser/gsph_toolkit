@@ -9,7 +9,7 @@ El **TSP (Travelling Salesman Problem)** es uno de los problemas más clásicos 
 ### Ejemplo aplicado:
 > Un camión de reparto debe entregar paquetes en 15 comunas de una región. Si no planifica bien su ruta, podría recorrer muchos kilómetros extra. Además, la planificación debe realizarse rápidamente para ser práctica en la vida real.
 
-**Imagen sugerida:**  
+**Imagen a poner:**  
 Mapa de las municipalidades de la Región Metropolitana de Santiago mostrando una ruta TSP tradicional.
 
 ---
@@ -31,7 +31,7 @@ GSPH es una heurística que resuelve el TSP utilizando una estrategia **espacial
 ### Ejemplo ilustrativo:
 > Imagina que tienes que visitar 50 clientes en una ciudad. Lo natural sería dividir por zonas: primero los del centro, luego los del norte, después los del sur, etc. GSPH automatiza esta idea utilizando geometría y densidad.
 
-**Imagen sugerida:**  
+**Imagen a poner:**  
 Visualización de GSPH aplicado a la Región Metropolitana, con zonas diferenciadas y subrutas conectadas.
 
 ---
@@ -58,5 +58,5 @@ GSPH-FC es una **extensión mejorada de GSPH** que incorpora un sistema de penal
 ### Ejemplo aplicado:
 > Supongamos que el algoritmo agrupa dos comunas muy lejanas en una misma zona: eso aumenta la distancia del tour. GSPH-FC corrige este tipo de situaciones, actuando como un “supervisor” de las zonas generadas por GSPH.
 
-**Imagen sugerida:**  
+**Imagen a poner:**  
 Mapa de la Región Metropolitana con agrupaciones optimizadas por GSPH-FC, mostrando mejoras respecto al caso anterior.
