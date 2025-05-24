@@ -19,10 +19,10 @@ A continuación se describen las métricas que utilizamos para comparar las heur
 
 | Parámetro | ¿Qué mide? | Fórmula / Cálculo | Unidades |
 |-----------|------------|-------------------|----------|
-| **Longitud total del tour** | Suma de todas las distancias entre nodos consecutivos (incluyendo el regreso al origen). Refleja la **calidad** de la solución: cuanto más corta, mejor. | \(\displaystyle L = \sum_{i=1}^{n} d(p_i, p_{i+1}), \; p_{n+1}=p_1\) | metros, kilómetros o unidades TSPLIB |
-| **Tiempo de ejecución** | Tiempo que el algoritmo tarda en construir la solución. Indica la **eficiencia computacional**. | \(t = t_{\text{fin}} - t_{\text{inicio}}\) | segundos (s) |
-| **BKS (Best Known Solution)** | La mejor longitud reportada en la literatura o repositorios oficiales para la instancia. Sirve como referencia de “piso”. | — (dato externo) | mismas que *Longitud* |
-| **GAP** | Diferencia relativa entre nuestra longitud y el BKS; indica **qué tan lejos** estamos del óptimo conocido. | \(\displaystyle \text{GAP} = \frac{L_{\text{heur}} - L_{\text{BKS}}}{L_{\text{BKS}}}\times100\%\) | porcentaje (%) |
+| **Longitud total del tour** | Suma de todas las distancias entre nodos consecutivos (incluyendo el regreso al origen). Refleja la **calidad** de la solución: cuanto más corta, mejor. | $L = \sum_{i=1}^{n} d(p_i, p_{i+1})$, donde $p_{n+1}=p_1$ | metros, kilómetros o unidades TSPLIB |
+| **Tiempo de ejecución** | Tiempo que el algoritmo tarda en construir la solución. Indica la **eficiencia computacional**. | $t = t_{fin} - t_{inicio}$ | segundos (s) |
+| **BKS (Best Known Solution)** | La mejor longitud reportada en la literatura o repositorios oficiales para la instancia. Sirve como referencia de "piso". | — (dato externo) | mismas que *Longitud* |
+| **GAP** | Diferencia relativa entre nuestra longitud y el BKS; indica **qué tan lejos** estamos del óptimo conocido. | $GAP = \frac{L_{heur} - L_{BKS}}{L_{BKS}} \times 100\%$ | porcentaje (%) |
 
 > **Resumen:**  
 > 1. *Longitud* evalúa la **calidad** del tour.  
