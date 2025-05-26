@@ -3,6 +3,7 @@ import tsplib95
 import os
 from datetime import datetime
 import shutil
+import io
 
 def getTspFiles(path="input") -> List[tsplib95.models.StandardProblem]:
     fileList = [f for f in os.listdir(path) if f.endswith(".tsp")]
@@ -16,7 +17,19 @@ def getTspFiles(path="input") -> List[tsplib95.models.StandardProblem]:
 
     return problemList
 
-def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FILENAME = "results.txt",PLOT_FILENAME="plot.png"):
+def generateTourFileString(instance,dimension,distance,optimal=False) -> io.BytesIO:
+
+    tourFile =  f"NAME : {instance}{".opt.tour" if optimal else ".tour"}\n"
+    tourFile += f"TYPE : TOUR\n"
+    tourFile += f"COMMENT : {"Optimal solution of" if optimal else "Solution of"} {instance} ({distance})\n"
+    tourFile += f"DIMENSION : {dimension}\n"
+    tourFile += f"TOUR_SECTION\n"
+
+    #REVISAR COMO TRANSFORMAR A TOUR...
+
+    return tourFile
+
+def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FILENAME = "results.txt",PLOT_FILENAME="plot.png",INSTANCE_DIMENSION=0):
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
     currTime = datetime.now()
     year = currTime.year
@@ -36,7 +49,6 @@ def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FI
     with open(results_path,'w') as file:
         file.write(results_string)
 
-
     #SavePlot
     plotImage = RESULTS.get('plot')
     print(plotImage)
@@ -44,6 +56,11 @@ def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FI
         plot_image_path = os.path.join(outputPath,PLOT_FILENAME)
         with open(plot_image_path,'wb') as file:
             shutil.copyfileobj(plotImage, file)
+    #SaveTourFile
+    tourFileString = generateTourFileString(INSTANCE_NAME.lower(),INSTANCE_DIMENSION,RESULTS.get('distance'))
+    tourFilePath = os.path.join(outputPath,f"{INSTANCE_NAME}.tour")
+    with open(tourFilePath, 'w') as file:
+        file.write(tourFileString)
 
 def tsplib95ToNodeList(problem:tsplib95.models.StandardProblem) -> List:
     nodes = []
