@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import euclidean
 import time
+import io
 def read_tsplib(filename):
     nodes = []
     with open(filename, 'r') as f:
@@ -42,13 +43,35 @@ def tsp_2opt(points, max_iter=2000):
                     improved = True
         iter_count += 1
     return best
-def plot_route(path, title="Recorrido"):
+def plot_route(path, title="Recorrido",save_on_memory=False):
     x, y = zip(*path)
     plt.figure(figsize=(8,8))
     plt.plot(x + (x[0],), y + (y[0],), marker='o')
     plt.title(title)
     plt.grid(True)
-    plt.show()
+
+    # Save on Buffer
+    if save_on_memory:
+        buf = io.BytesIO()
+        plt.savefig(buf, bbox_inches='tight')
+        buf.seek(0)  # Rewind the buffer to the beginning
+        plt.close()
+        return buf    
+    else:
+        plt.show()
+
+def tsp_clasico(nodes):
+    start_2opt  = time.perf_counter()
+    tsp_path    = tsp_2opt(nodes)
+
+    tsp_path.append(tsp_path[0])
+
+    tsp_len     = total_path_length(tsp_path)
+    end_2opt    = time.perf_counter()
+    plotImage  = plot_route(tsp_path, title="TSP clásico (2-opt) recorrido",save_on_memory=True)
+    return {"duration": end_2opt-start_2opt,"distance": tsp_len,"tours":tsp_path,"plot":plotImage}
+
+"""
 if __name__ == "__main__":
     nodes = read_tsplib('a280.tsp')
     start_2opt = time.time()
@@ -59,3 +82,5 @@ if __name__ == "__main__":
     print(f"2-OPT Global - Longitud total: {round(tsp_len,2)}")
     print(f"2-OPT Global - Tiempo: {round(end_2opt-start_2opt,2)}s")
     plot_route(tsp_path, title="TSP clásico (2-opt) recorrido")
+
+"""

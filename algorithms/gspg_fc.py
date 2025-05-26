@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import euclidean
-import time
+from time import perf_counter
 import os
+import io
 EPS_FRONTIER   = 5
 MAX_ITER_LOCAL = 800
 RESULTS_DIR = "gsph_fc_results"
@@ -91,7 +92,8 @@ def gsph_fc(nodes):
             inter_len += d
     sub_len = sum(total_path_length(r) for r in routes.values())
     return routes, connections, sub_len+inter_len, xmid, ymid
-def plot_gsph_fc(routes, conns, xmid, ymid, save_path=None):
+
+def plot_gsph_fc(routes, conns, xmid, ymid, save_path=None,save_on_memory=False):
     plt.figure(figsize=(8,8))
     colors = ['blue', 'green', 'red', 'orange']
     for idx, (q, r) in enumerate(routes.items()):
@@ -116,7 +118,27 @@ def plot_gsph_fc(routes, conns, xmid, ymid, save_path=None):
     plt.grid(True)
     if save_path:
         plt.savefig(save_path, bbox_inches='tight')
-    plt.close()
+    
+    # Save on Buffer
+    if save_on_memory:
+        buf = io.BytesIO()
+        plt.savefig(buf, bbox_inches='tight')
+        buf.seek(0)  # Rewind the buffer to the beginning
+        plt.close()
+        return buf
+    else:
+        plt.close()
+
+def gspg_fc_run(nodes):
+    t0      = perf_counter()
+    routes, conns, total_length, xm, ym = gsph_fc(nodes)
+    t_heur  = perf_counter() - t0
+    plotImage   = plot_gsph_fc(routes,conns,xm,ym,None,save_on_memory=True)
+    print(plotImage)
+    return {"duration": t_heur,"distance": total_length,"tours":routes,"plot":plotImage}
+
+
+"""
 if __name__ == "__main__":
     os.makedirs(RESULTS_DIR, exist_ok=True)
     nodes = read_tsplib('a280.tsp')
@@ -131,3 +153,4 @@ if __name__ == "__main__":
     print(f"Longitud total de la ruta: {total_length:.2f}")
     print(f"Tiempo de ejecución      : {t_heur:.3f} segundos")
     plot_gsph_fc(routes, conns, xm, ym, save_path=os.path.join(RESULTS_DIR, "grafico_gsph_fc.png"))
+"""

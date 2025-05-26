@@ -11,7 +11,7 @@ parser.add_argument("instancia", type=Path)
 parser.add_argument("--plot", action="store_true", help="Generar PNG con el recorrido")
 args = parser.parse_args()
 mod_name, solver_name, plot_name = ALGORITHMS[args.algoritmo]
-mod     = importlib.import_module(mod_name)
+mod     = importlib.import_module(f"algorithms.{mod_name}")
 solver  = getattr(mod, solver_name)
 plotter = getattr(mod, plot_name) if args.plot else None
 
@@ -28,6 +28,7 @@ else:
 t_exec = time.time() - t0
 result_dir = Path(f"results_manual_test_{args.instancia.stem}")
 result_dir.mkdir(exist_ok=True)
+print(plotter)
 if plotter:
     if args.algoritmo == "gsph_fc":
         plotter(rutas, conns, xm, ym,
