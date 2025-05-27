@@ -9,9 +9,6 @@ El **TSP (Travelling Salesman Problem)** es uno de los problemas más clásicos 
 ### Ejemplo aplicado:
 > Un camión de reparto debe entregar paquetes en 15 comunas de una región. Si no planifica bien su ruta, podría recorrer muchos kilómetros extra. Además, la planificación debe realizarse rápidamente para ser práctica en la vida real.
 
-**Imagen a poner:**  
-Mapa de las municipalidades de la Región Metropolitana de Santiago mostrando una ruta TSP tradicional.
-
 ---
 ## 📏 Parámetros a evaluar
 
@@ -46,10 +43,6 @@ GSPH es una heurística que resuelve el TSP utilizando una estrategia **espacial
 
 ### Ejemplo ilustrativo:
 > Imagina que tienes que visitar 50 clientes en una ciudad. Lo natural sería dividir por zonas: primero los del centro, luego los del norte, después los del sur, etc. GSPH automatiza esta idea utilizando geometría y densidad.
-
-**Imagen a poner:**  
-Visualización de GSPH aplicado a la Región Metropolitana, con zonas diferenciadas y subrutas conectadas.
-
 ---
 
 ## Mejora de la Propuesta: GSPH‑FC (GSPH con Filtro de Clústeres)
@@ -72,7 +65,46 @@ GSPH-FC es una **extensión mejorada de GSPH** que incorpora un sistema de penal
 ---
 
 ### Ejemplo aplicado:
-> Supongamos que el algoritmo agrupa dos comunas muy lejanas en una misma zona: eso aumenta la distancia del tour. GSPH-FC corrige este tipo de situaciones, actuando como un “supervisor” de las zonas generadas por GSPH.
+> Supongamos que el algoritmo agrupa dos comunas muy lejanas en una misma zona: eso aumenta la distancia del tour. GSPH-FC corrige este tipo de situaciones, actuando como un "supervisor" de las zonas generadas por GSPH.
 
-**Imagen a poner:**  
-Mapa de la Región Metropolitana con agrupaciones optimizadas por GSPH-FC, mostrando mejoras respecto al caso anterior.
+---
+
+## 🚀 Cómo ejecutar una instancia manualmente
+
+Para probar cualquiera de las heurísticas con un conjunto de datos específico, se puede utilizar el script `manual_test.py` que facilita la ejecución y comparación:
+
+```bash
+python manual_test.py <nombre_de_la_heuristica> instances/<nombre_instancia_tsp.tsp> --plot
+```
+
+### Parámetros:
+
+1. **nombre_de_la_heuristica**: Algoritmo a utilizar. Opciones disponibles:
+   - `tsp_clasico`: Implementación básica con mejora 2-opt
+   - `gsph_fc`: Nuestra propuesta mejorada GSPH con Filtro de Clústeres
+
+2. **nombre_instancia_tsp.tsp**: Archivo de instancia en formato TSPLIB ubicado en la carpeta `instances/`
+
+3. **--plot**: Parámetro opcional que genera una visualización gráfica de la solución
+
+### Ejemplo de uso:
+
+```bash
+python manual_test.py gsph_fc instances/a280.tsp --plot
+```
+
+### Resultados:
+
+Al ejecutar el comando, se genera:
+
+1. Una carpeta llamada `results_manual_test_<nombre_instancia>` que contiene:
+   - Un archivo de texto `resultado.txt` con información sobre:
+     - Algoritmo utilizado
+     - Nombre de la instancia
+     - Longitud total del tour
+     - Tiempo de ejecución
+   - Si se usa la opción `--plot`, un archivo PNG `grafico_<algoritmo>.png` que muestra visualmente el tour encontrado
+
+También se muestra en la terminal un resumen con los datos principales de la ejecución.
+
+---
