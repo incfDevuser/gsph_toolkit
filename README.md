@@ -10,7 +10,7 @@ El **TSP (Travelling Salesman Problem)** es uno de los problemas más clásicos 
 > Un camión de reparto debe entregar paquetes en 15 comunas de una región. Si no planifica bien su ruta, podría recorrer muchos kilómetros extra. Además, la planificación debe realizarse rápidamente para ser práctica en la vida real.
 
 ---
-## 📏 Parámetros a evaluar
+## Parámetros a evaluar
 
 A continuación se describen las métricas que utilizamos para comparar las heurísticas.  
 
@@ -69,7 +69,7 @@ GSPH-FC es una **extensión mejorada de GSPH** que incorpora un sistema de penal
 
 ---
 
-## 🚀 Cómo ejecutar una instancia manualmente
+## Cómo ejecutar una instancia manualmente
 
 Para probar cualquiera de las heurísticas con un conjunto de datos específico, se puede utilizar el script `manual_test.py` que facilita la ejecución y comparación:
 
