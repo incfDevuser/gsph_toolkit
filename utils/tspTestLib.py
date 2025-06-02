@@ -4,6 +4,11 @@ import os
 from datetime import datetime
 import shutil
 import io
+import csv
+
+DEFAULT_EXPORT_FOLDER="output"
+DEFAULT_RESULTS_FILENAME="results.txt"
+DEFAULT_PLOT_FILENAME="plot"
 
 def getTspFiles(path="input") -> List[tsplib95.models.StandardProblem]:
     fileList = [f for f in os.listdir(path) if f.endswith(".tsp")]
@@ -29,7 +34,28 @@ def generateTourFileString(instance,dimension,distance,optimal=False) -> io.Byte
 
     return tourFile
 
-def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FILENAME = "results.txt",PLOT_FILENAME="plot.png",INSTANCE_DIMENSION=0):
+def searchAndReturnResults(OUTPUT_FOLDER=DEFAULT_EXPORT_FOLDER,RESULTS_FILENAME=DEFAULT_RESULTS_FILENAME):
+    #Get All results.
+    resultsInFolder = os.listdir(OUTPUT_FOLDER)
+    print(resultsInFolder)
+
+    #get All Results files
+    results = []
+
+    for resultsF in resultsInFolder:
+        path = os.path.join(OUTPUT_FOLDER,resultsF)
+        fileList = [f for f in os.listdir(path) if f.startswith(RESULTS_FILENAME)]
+        for resultFile in fileList:
+            resultPath = os.path.join(path,resultFile)
+            with open(resultPath) as file:
+                csvReader = csv.DictReader(file,delimiter=";")
+                for row in csvReader:
+                    print(row['distance'])
+                    results.append(row["distance"])
+
+
+
+def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FILENAME = DEFAULT_RESULTS_FILENAME,PLOT_FILENAME=f"{DEFAULT_PLOT_FILENAME}.png",INSTANCE_DIMENSION=0):
     os.makedirs(OUTPUT_FOLDER, exist_ok=True)
     currTime = datetime.now()
     year = currTime.year

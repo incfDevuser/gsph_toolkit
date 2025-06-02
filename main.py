@@ -8,4 +8,6 @@ if __name__ == "__main__":
             {"name":"GSPH_FC","function":lambda x:gspg_fc_run(x)},        
             {"name":"CLASSIC_TSP","function":lambda x:tsp_clasico(x)}
             ]
-    utils.tspTestLib.runTest(fList)
+    #utils.tspTestLib.runTest(fList)
+
+    utils.tspTestLib.searchAndReturnResults();

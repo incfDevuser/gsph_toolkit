@@ -68,8 +68,8 @@ def tsp_clasico(nodes):
 
     tsp_len     = total_path_length(tsp_path)
     end_2opt    = time.perf_counter()
-    plotImage  = plot_route(tsp_path, title="TSP clásico (2-opt) recorrido",save_on_memory=True)
-    return {"duration": end_2opt-start_2opt,"distance": tsp_len,"tours":tsp_path,"plot":plotImage}
+    #plotImage  = plot_route(tsp_path, title="TSP clásico (2-opt) recorrido",save_on_memory=True)
+    return {"duration": end_2opt-start_2opt,"distance": tsp_len,"tours":[tsp_path],"plot":plotImage}
 
 """
 if __name__ == "__main__":
