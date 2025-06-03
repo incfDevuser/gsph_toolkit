@@ -129,13 +129,19 @@ def plot_gsph_fc(routes, conns, xmid, ymid, save_path=None,save_on_memory=False)
     else:
         plt.close()
 
+# Code for tspTestLib, NO PLOT!
 def gspg_fc_run(nodes):
     t0      = perf_counter()
     routes, conns, total_length, xm, ym = gsph_fc(nodes)
     t_heur  = perf_counter() - t0
-    plotImage   = plot_gsph_fc(routes,conns,xm,ym,None,save_on_memory=True)
-    print(plotImage)
-    return {"duration": t_heur,"distance": total_length,"tours":routes,"plot":plotImage}
+    #plotImage   = plot_gsph_fc(routes,conns,xm,ym,None,save_on_memory=True)
+
+    return {"duration": t_heur,
+            "distance": total_length,
+            "tours":routes,
+            "conns":conns,
+            "xm":xm,
+            "ym":ym,}
 
 
 """

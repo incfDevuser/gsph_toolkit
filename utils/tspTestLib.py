@@ -6,9 +6,10 @@ import shutil
 import io
 import csv
 
-DEFAULT_EXPORT_FOLDER="output"
-DEFAULT_RESULTS_FILENAME="results.txt"
-DEFAULT_PLOT_FILENAME="plot"
+DEFAULT_INPUT_FOLDER    = "input"
+DEFAULT_EXPORT_FOLDER   = "output"
+DEFAULT_RESULTS_FILENAME= "results.txt"
+DEFAULT_PLOT_FILENAME   = "plot"
 
 def getTspFiles(path="input") -> List[tsplib95.models.StandardProblem]:
     fileList = [f for f in os.listdir(path) if f.endswith(".tsp")]
@@ -21,6 +22,20 @@ def getTspFiles(path="input") -> List[tsplib95.models.StandardProblem]:
             problemList.append(problem)
 
     return problemList
+
+def getBKS(tspName):
+    path = os.path.join(DEFAULT_INPUT_FOLDER,"bks.txt")
+    with open(path) as file:
+        for line in file:
+            fileLine = line.split(":")
+            name = fileLine[0].strip().upper()
+            bks = fileLine[1].strip()
+            #print(name,bks)
+            if tspName == name:
+                return int(bks)
+
+def getGapBKS(distance,bks):
+    return ((distance-bks)/bks)*100
 
 def generateTourFileString(instance,dimension,distance,optimal=False) -> io.BytesIO:
 
@@ -37,7 +52,7 @@ def generateTourFileString(instance,dimension,distance,optimal=False) -> io.Byte
 def searchAndReturnResults(OUTPUT_FOLDER=DEFAULT_EXPORT_FOLDER,RESULTS_FILENAME=DEFAULT_RESULTS_FILENAME):
     #Get All results.
     resultsInFolder = os.listdir(OUTPUT_FOLDER)
-    print(resultsInFolder)
+    #print(resultsInFolder)
 
     #get All Results files
     results = []
@@ -65,16 +80,25 @@ def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FI
     minute = currTime.minute
     second = currTime.second
 
-    title = f"{INSTANCE_NAME}_{ALGORITHM_NAME}_{year}_{month}_{day}_{hour}_{minute}_{second}"
+    bks = getBKS(INSTANCE_NAME)
 
+    distance = RESULTS.get('distance')
+    gapbks = getGapBKS(distance,bks)
+
+    gapbks = round(gapbks,2)
+
+    title = f"{INSTANCE_NAME}_{ALGORITHM_NAME}_{year}_{month}_{day}_{hour}_{minute}_{second}"
+    
     outputPath = os.path.join(OUTPUT_FOLDER,title)
     os.mkdir(outputPath)
 
-    results_string = f"distance;duration;path\n{RESULTS.get('distance')};{RESULTS.get('duration')};{RESULTS.get('tours')}\n"
+    results_string = f"distance;gap;bks;duration;path\n{RESULTS.get('distance')};{gapbks};{bks};{RESULTS.get('duration')};{RESULTS.get('tours')}\n"
     results_path = os.path.join(outputPath,RESULTS_FILENAME)
     with open(results_path,'w') as file:
         file.write(results_string)
 
+    
+    """
     #SavePlot
     plotImage = RESULTS.get('plot')
 
@@ -82,6 +106,7 @@ def generateOutput(OUTPUT_FOLDER,INSTANCE_NAME,ALGORITHM_NAME,RESULTS,RESULTS_FI
         plot_image_path = os.path.join(outputPath,PLOT_FILENAME)
         with open(plot_image_path,'wb') as file:
             shutil.copyfileobj(plotImage, file)
+    """
     #SaveTourFile
     tourFileString = generateTourFileString(INSTANCE_NAME.lower(),INSTANCE_DIMENSION,RESULTS.get('distance'))
     tourFilePath = os.path.join(outputPath,f"{INSTANCE_NAME}.tour")
@@ -97,6 +122,8 @@ def tsplib95ToNodeList(problem:tsplib95.models.StandardProblem) -> List:
 def runTest(functionList,OUTPUT_FOLDER="output",RESULTS_FILENAME="results.txt"):
 
     problemList = getTspFiles()
+    
+    resultList = []
 
     for problem in problemList:
         #print(f"[*]Ejecutando test con {problem.name}")
@@ -105,6 +132,15 @@ def runTest(functionList,OUTPUT_FOLDER="output",RESULTS_FILENAME="results.txt"):
             #print(f"[*]Ejecutando función {function["name"]}")
             nodes = tsplib95ToNodeList(problem)
             results = function["function"](nodes)
+
+            resultList.append({
+                'algorithm':function["name"],
+                "name": problem.name.upper(),
+                'results':results,
+                'dimension':problem.dimension
+            })
+
+
             #print(f"[+]Proceso finalizado, almacenando salidas")
             generateOutput(OUTPUT_FOLDER,
                            INSTANCE_NAME=problem.name.upper(),
@@ -114,5 +150,6 @@ def runTest(functionList,OUTPUT_FOLDER="output",RESULTS_FILENAME="results.txt"):
                            INSTANCE_DIMENSION=problem.dimension
                            )
             #print(f"[+]Salida almacenada correctamente.")
+    
 
-
+    print(resultList)
