@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import euclidean
-from time import perf_counter
-import os
+from time import perf_counter, process_time
+import os 
 import io
 EPS_FRONTIER   = 5
 MAX_ITER_LOCAL = 800
@@ -130,18 +130,24 @@ def plot_gsph_fc(routes, conns, xmid, ymid, save_path=None,save_on_memory=False)
         plt.close()
 
 # Code for tspTestLib, NO PLOT!
-def gspg_fc_run(nodes):
-    t0      = perf_counter()
+def gspg_fc_run(nodes,plot):
+    t0      = process_time()
     routes, conns, total_length, xm, ym = gsph_fc(nodes)
-    t_heur  = perf_counter() - t0
-    #plotImage   = plot_gsph_fc(routes,conns,xm,ym,None,save_on_memory=True)
+    t_heur  = process_time() - t0
+    
+    
+    if plot:
+        plotImage   = plot_gsph_fc(routes,conns,xm,ym,None,save_on_memory=True)
+    else:
+        plotImage = None
 
     return {"duration": t_heur,
             "distance": total_length,
             "tours":routes,
             "conns":conns,
             "xm":xm,
-            "ym":ym,}
+            "ym":ym,
+            "plotImage":plotImage}
 
 
 """

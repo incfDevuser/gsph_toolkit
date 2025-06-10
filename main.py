@@ -1,14 +1,27 @@
+#Arguments
+import argparse, importlib, time
+from pathlib import Path
+
 import utils.tspTestLib
 from algorithms.tsp_clasico import tsp_classic
 from algorithms.gspg_fc import gspg_fc_run
 
+parser = argparse.ArgumentParser(description="Try and Export TSP Heuristics")
+parser.add_argument("-r","--run-test", action="store_true", help="Run and export tests")
+parser.add_argument("-p","--plot", action="store_true", help="Allow the algorithms to export a PNG of the tours")
+parser.add_argument("-t","--table-export",action="store_const",const=utils.tspTestLib.DEFAULT_TABLE_RESULTS_FILENAME, help="Search results and export a comparison table")
+
+
+fList = [{"name":"GSPH_FC","function":lambda x,y:gspg_fc_run(x,y)},        
+            #{"name":"CLASSIC_TSP","function":lambda x,y:tsp_classic(x,y)}
+        ]
+            
 if __name__ == "__main__":
-
-    fList = [
-            {"name":"GSPH_FC","function":lambda x:gspg_fc_run(x)},        
-            {"name":"CLASSIC_TSP","function":lambda x:tsp_classic(x)}
-            ]
-    utils.tspTestLib.runTest(fList)
+    args = parser.parse_args()
     
-
-    #utils.tspTestLib.searchAndReturnResults();
+    if args.run_test:
+        utils.tspTestLib.runTest(fList,
+                                EXPORT_PLOT = args.plot)
+    if args.table_export:
+        print("Exporting Table")
+        utils.tspTestLib.searchAndReturnResults(TABLE_RESULTS_FILENAME=f"{args.table_export}.csv");

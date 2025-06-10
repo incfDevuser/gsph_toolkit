@@ -61,19 +61,25 @@ def plot_route(path, title="Recorrido",save_on_memory=False):
         plt.show()
 
 
-# Code for tspTestLib, NO PLOT!
-def tsp_classic(nodes):
-    start_2opt  = time.perf_counter()
+# Code for tspTestLib
+def tsp_classic(nodes,plot):
+    start_2opt  = time.process_time()
     tsp_path    = tsp_2opt(nodes)
 
     tsp_path.append(tsp_path[0])
 
     tsp_len     = total_path_length(tsp_path)
-    end_2opt    = time.perf_counter()
-    #plotImage  = plot_route(tsp_path, title="TSP clásico (2-opt) recorrido",save_on_memory=True)
+    end_2opt    = time.process_time()
+    
+    if plot:
+        plotImage  = plot_route(tsp_path, title="TSP clásico (2-opt) recorrido",save_on_memory=True)
+    else:
+        plotImage = None
+    
     return {"duration": end_2opt-start_2opt,
             "distance": tsp_len,
-            "tours":[tsp_path],}
+            "tours":[tsp_path],
+            "plotImage":plotImage}
 
 """
 if __name__ == "__main__":
