@@ -72,6 +72,7 @@ def gsph_fc(nodes):
     quads, xmid, ymid = subdivide_quadrants(nodes)
     routes = {}
     for q, pts in quads.items():
+        print(pts)
         if len(pts) > 1:
             rt = tsp_2opt(pts, MAX_ITER_LOCAL)
             routes[q] = rt

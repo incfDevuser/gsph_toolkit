@@ -4,7 +4,8 @@ from pathlib import Path
 
 import utils.tspTestLib
 from algorithms.tsp_clasico import tsp_classic
-from algorithms.gspg_fc import gspg_fc_run
+from algorithms.gsph_fc.GSPHSolver import gsph_fc_test_run
+
 
 parser = argparse.ArgumentParser(description="Try and Export TSP Heuristics")
 parser.add_argument("-r","--run-test", action="store_true", help="Run and export tests")
@@ -12,7 +13,7 @@ parser.add_argument("-p","--plot", action="store_true", help="Allow the algorith
 parser.add_argument("-t","--table-export",action="store_const",const=utils.tspTestLib.DEFAULT_TABLE_RESULTS_FILENAME, help="Search results and export a comparison table")
 
 
-fList = [{"name":"GSPH_FC","function":lambda x,y:gspg_fc_run(x,y)},        
+fList = [{"name":"GSPH_FC","function":lambda x,y:gsph_fc_test_run(x,y)},        
             #{"name":"CLASSIC_TSP","function":lambda x,y:tsp_classic(x,y)}
         ]
             

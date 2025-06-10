@@ -153,7 +153,7 @@ def runTest(functionList,
     resultList = []
 
     for problem in problemList:
-        #print(f"[*]Ejecutando test con {problem.name}")
+        print(f"[*]Ejecutando test con {problem.name}")
 
         for function in functionList:
             #print(f"[*]Ejecutando función {function["name"]}")
